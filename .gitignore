@@ -1,0 +1,13 @@
+*.png
+*.avif
+*.jpg
+*.jpeg
+*.webp
+*.svg
+*.ico
+*.venv
+ocr_dataset
+__pycache__
+*.pyc
+outputs
+best_ocr_model
