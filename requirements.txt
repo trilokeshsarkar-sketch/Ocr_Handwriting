@@ -1,0 +1,22 @@
+streamlit==1.32.0
+
+# PyTorch (stable for Python 3.14)
+torch>=2.9.0,<2.12.0
+torchvision>=0.20.0,<0.27.0
+
+# Transformers (compatible range)
+transformers>=4.41.0,<4.48.0
+
+# Core
+numpy>=1.24.0,<2.0.0
+pillow==10.4.0
+
+# Image processing (headless only)
+opencv-python-headless>=4.8.0,<4.11.0
+
+# PDF (cloud-safe)
+pypdfium2>=4.30.0,<6.0.0
+PyPDF2>=3.0.1,<4.0.0
+
+# Utils
+pydantic>=2.0.0,<3.0.0
