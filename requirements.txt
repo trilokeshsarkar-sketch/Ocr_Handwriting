@@ -10,7 +10,7 @@ transformers>=4.41.0,<4.48.0
 # Core
 numpy>=1.24.0,<2.0.0
 pillow==10.4.0
-
+easyocr
 # Image processing (headless only)
 opencv-python-headless>=4.8.0,<4.11.0
 
