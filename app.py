@@ -46,14 +46,19 @@ def load_css() -> None:
 
 @st.cache_resource
 def load_pipeline(use_custom_model: bool):
-    """Initialize the OCR pipeline once per Streamlit session."""
+    """Initialize the OCR pipeline once per Streamlit session with cloud optimization."""
     from ocr_pipeline import AdaptiveOCRPipeline
 
     custom_model_path = str(MODEL_DIR) if use_custom_model and MODEL_DIR.exists() else None
-    return AdaptiveOCRPipeline(
-        trocr_model_name=DEFAULT_TROCR_MODEL,
-        custom_model_path=custom_model_path,
-    )
+    try:
+        return AdaptiveOCRPipeline(
+            trocr_model_name=DEFAULT_TROCR_MODEL,
+            custom_model_path=custom_model_path,
+        )
+    except RuntimeError as e:
+        st.error(f"Failed to load OCR pipeline: {e}")
+        st.info("This may be due to insufficient resources. Consider reducing image size or using simpler models.")
+        raise
 
 
 def preprocess_image(image: Image.Image, scale: int = 2, max_dimension: int | None = None) -> Image.Image:

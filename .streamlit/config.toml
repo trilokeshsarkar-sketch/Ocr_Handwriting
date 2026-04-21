@@ -1,0 +1,32 @@
+[theme]
+primaryColor = "#FF6B35"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F0F2F6"
+textColor = "#262730"
+font = "sans serif"
+
+[client]
+toolbarPosition = "bottom"
+showErrorDetails = false
+showSidebarNavigation = true
+maxUploadSize = 200
+
+[server]
+port = 8501
+headless = true
+runOnSave = true
+enableXsrfProtection = true
+enableCORS = false
+
+[logger]
+level = "info"
+
+[client.toolbarPosition]
+position = "bottom"
+
+[browser]
+gatherUsageStats = false
+
+# Performance optimization for cloud
+[session]
+sessionStateTimeout = 900

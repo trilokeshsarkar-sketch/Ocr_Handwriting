@@ -11,3 +11,19 @@ __pycache__
 *.pyc
 outputs
 best_ocr_model
+
+# Logs and temporary files
+*.log
+*.err
+*.tmp
+
+# Cache directories
+.cache/
+.streamlit/cache/
+.torch_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
