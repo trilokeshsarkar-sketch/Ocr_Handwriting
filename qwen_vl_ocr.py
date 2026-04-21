@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-import pdf2image
 import torch
 from PIL import Image
 from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
@@ -17,7 +16,7 @@ DEFAULT_OCR_PROMPT = (
 
 
 def extract_pdf_images(pdf_path: Path, max_pages: int | None = None) -> list[Image.Image]:
-    """Render PDF pages into RGB PIL images."""
+    """Render PDF pages into RGB PIL images using pypdfium2."""
     pdf_bytes = pdf_path.read_bytes()
 
     try:
@@ -35,17 +34,10 @@ def extract_pdf_images(pdf_path: Path, max_pages: int | None = None) -> list[Ima
 
         document.close()
         return rendered_pages
-    except Exception as pdfium_error:
-        try:
-            rendered_pages = pdf2image.convert_from_bytes(pdf_bytes, dpi=150)
-            rgb_pages = [page.convert("RGB") for page in rendered_pages]
-            return rgb_pages[:max_pages] if max_pages else rgb_pages
-        except Exception as pdf2image_error:
-            raise RuntimeError(
-                "Unable to render PDF pages. "
-                f"pypdfium2 error: {pdfium_error}. "
-                f"pdf2image error: {pdf2image_error}"
-            ) from pdf2image_error
+    except Exception as error:
+        raise RuntimeError(
+            f"Unable to render PDF pages with pypdfium2: {error}"
+        ) from error
 
 
 class QwenVLOCRPipeline:

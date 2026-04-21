@@ -1,8 +1,12 @@
 from datetime import datetime
 from pathlib import Path
+import warnings
 
 import streamlit as st
 from PIL import Image
+
+# Suppress pin_memory warning when no GPU is available (common in cloud environments)
+warnings.filterwarnings("ignore", message=".*pin_memory.*accelerator.*")
 
 
 APP_DIR = Path(__file__).parent
