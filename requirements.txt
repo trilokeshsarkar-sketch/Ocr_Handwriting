@@ -1,20 +1,25 @@
 streamlit==1.32.0
 
-# PyTorch (stable for Python 3.14)
-torch>=2.9.0,<2.12.0
-torchvision>=0.20.0,<0.27.0
+# ✅ Use CPU-only PyTorch (much lighter + works on Render)
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.2.2+cpu
+torchvision==0.17.2+cpu
 
-# Transformers (compatible range)
-transformers>=4.41.0,<4.48.0
+# Transformers (stable with torch 2.2)
+transformers==4.47.0
 
 # Core
 numpy>=1.24.0,<2.0.0
 pillow==10.4.0
-easyocr
-# Image processing (headless only)
+
+# ✅ Fix EasyOCR dependency issue (NO Rust build)
+easyocr==1.7.1
+python-bidi==0.4.2
+
+# Image processing
 opencv-python-headless>=4.8.0,<4.11.0
 
-# PDF (cloud-safe)
+# PDF
 pypdfium2>=4.30.0,<6.0.0
 PyPDF2>=3.0.1,<4.0.0
 
