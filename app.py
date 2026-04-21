@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 import warnings
+import os
 
 import streamlit as st
 from PIL import Image
@@ -9,10 +10,20 @@ from PIL import Image
 warnings.filterwarnings("ignore", message=".*pin_memory.*accelerator.*")
 
 
-APP_DIR = Path(__file__).parent
+# Cloud-safe path resolution
+def get_app_dir() -> Path:
+    """Get application directory, supporting both local and cloud environments."""
+    try:
+        return Path(__file__).resolve().parent
+    except (NameError, TypeError):
+        # In some cloud/notebook environments, __file__ may not be defined
+        return Path.cwd()
+
+
+APP_DIR = get_app_dir()
 CSS_PATH = APP_DIR / "styles.css"
 MODEL_DIR = APP_DIR / "best_ocr_model"
-OUTPUTS_DIR = APP_DIR / "outputs"
+OUTPUTS_DIR = Path(os.getenv("OCR_OUTPUT_DIR", str(APP_DIR / "outputs")))
 DEFAULT_TROCR_MODEL = "microsoft/trocr-large-handwritten"
 
 

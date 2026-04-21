@@ -109,21 +109,32 @@ class AdaptiveOCRPipeline:
 
     @staticmethod
     def resolve_model_dir(custom_model_path: str | None) -> Path | None:
+        """Resolve model directory, supporting local and cloud paths."""
         if not custom_model_path:
             return None
 
-        candidates: list[Path] = [Path(custom_model_path).expanduser()]
+        candidates: list[Path] = [
+            Path(custom_model_path).expanduser().resolve(),
+        ]
 
         for candidate in candidates:
+            if not candidate.exists():
+                continue
+
             if candidate.is_file():
                 continue
 
             if (candidate / "config.json").exists():
                 return candidate
 
-            nested_matches = [path.parent for path in candidate.rglob("config.json")]
-            if nested_matches:
-                return nested_matches[0]
+            # Look for nested config.json files
+            try:
+                nested_matches = [path.parent for path in candidate.rglob("config.json")]
+                if nested_matches:
+                    return nested_matches[0]
+            except (OSError, PermissionError):
+                # Handle permission issues in cloud environments
+                pass
 
         return None
 
