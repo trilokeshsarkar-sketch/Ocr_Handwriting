@@ -1,46 +1,34 @@
 services:
   - type: web
     name: ocr-streamlit-app
-    runtime: python
-    pythonVersion: 3.10
-    
+    env: python
+    plan: free
+
     buildCommand: >
       pip install --upgrade pip &&
       pip install -r requirements.txt
-    
-    startCommand: |
-      streamlit run app.py \
-        --server.port=8501 \
-        --server.address=0.0.0.0 \
-        --server.headless=true \
-        --server.enableCORS=false \
-        --logger.level=info \
-        --client.toolbarPosition=bottom \
-        --client.showErrorDetails=false \
-        --client.maxUploadSize=200
-    
+
+    startCommand: >
+      streamlit run app.py --server.port=$PORT --server.address=0.0.0.0 --server.headless=true --server.enableCORS=false
+
     envVars:
-      - key: STREAMLIT_SERVER_PORT
-        value: "8501"
-      - key: STREAMLIT_SERVER_ADDRESS
-        value: "0.0.0.0"
-      - key: STREAMLIT_SERVER_HEADLESS
-        value: "true"
-      - key: STREAMLIT_SERVER_ENABLE_CORS
-        value: "false"
-      - key: STREAMLIT_LOGGER_LEVEL
-        value: "info"
-      - key: STREAMLIT_CLIENT_SHOW_ERROR_DETAILS
-        value: "false"
+      - key: PYTHON_VERSION
+        value: 3.10.13
+
       - key: PYTHONUNBUFFERED
         value: "1"
+
       - key: TZ
         value: "UTC"
+
+      # ✅ Cache paths (good practice)
       - key: TORCH_HOME
         value: "/opt/render/.cache/torch"
       - key: TRANSFORMERS_CACHE
         value: "/opt/render/.cache/transformers"
       - key: EASYOCR_MODULE_PATH
         value: "/opt/render/.cache/easyocr"
+
+      # Optional
       - key: OCR_OUTPUT_DIR
         value: "/tmp/ocr_outputs"
