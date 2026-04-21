@@ -1,7 +1,6 @@
 from datetime import datetime
 from pathlib import Path
 
-import pdf2image
 import streamlit as st
 from PIL import Image
 
@@ -63,7 +62,7 @@ def preprocess_image(image: Image.Image, scale: int = 2, max_dimension: int | No
 
 
 def extract_pdf_images(pdf_file, max_pages: int | None = None) -> list[Image.Image]:
-    """Convert uploaded PDF bytes into PIL images."""
+    """Convert uploaded PDF bytes into PIL images using pypdfium2."""
     pdf_bytes = pdf_file.getvalue()
 
     try:
@@ -81,16 +80,10 @@ def extract_pdf_images(pdf_file, max_pages: int | None = None) -> list[Image.Ima
 
         document.close()
         return pdf_images
-    except Exception as pdfium_error:
-        try:
-            pdf_images = pdf2image.convert_from_bytes(pdf_bytes, dpi=150)
-            return pdf_images[:max_pages] if max_pages else pdf_images
-        except Exception as pdf2image_error:
-            raise RuntimeError(
-                "Unable to render PDF pages. "
-                f"pypdfium2 error: {pdfium_error}. "
-                f"pdf2image error: {pdf2image_error}"
-            ) from pdf2image_error
+    except Exception as error:
+        raise RuntimeError(
+            f"Unable to render PDF pages with pypdfium2: {error}"
+        ) from error
 
 
 def build_output_dir(uploaded_name: str) -> Path:
